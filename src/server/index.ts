@@ -82,7 +82,7 @@ const server = new Server({
             icon: "none",
             title: transformMsg(res?.data?.message),
           });
-          return Promise.reject(res?.data);
+          return Promise.reject(transformMsg(res?.data?.message));
         }
       } else {
         if (res.data?.code === 200) {
@@ -93,12 +93,12 @@ const server = new Server({
             icon: "none",
             title: transformMsg(res?.data?.message),
           });
-          return res?.data;
+          return Promise.reject(transformMsg(res?.data?.message));
         }
       }
     },
     responseinterceptorCatch: (err) => {
-      const code = err.response.status;
+      const code = err?.response?.status;
       Taro.hideToast();
       if (code === 401) {
         storage.clear();
@@ -145,7 +145,7 @@ const server = new Server({
           title: "http版本不支持该请求!",
         });
       } else {
-        Taro.showToast({ icon: "none", title: "err.message" });
+        Taro.showToast({ icon: "none", title: err?.message });
       }
       return Promise.reject(err);
     },
